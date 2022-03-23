@@ -3,7 +3,7 @@ body {
 	color:rgba(250,216,89,0.7);
 	background-color:black;
 	text-align: center;
-  width:auto;
+  	width:auto;
   }
 
 
@@ -14,6 +14,7 @@ body {
 .siteimg{
   width:300px;
   margin:auto;}
+
 .ironman{
   width:300px;
   margin:center;}
@@ -32,7 +33,7 @@ body {
 }
 
   .sitetitle{
-	color:rgba(250,216,89,1);
+color:rgba(250,216,89,1);
   text-align: center;
   margin: 1px auto;
   padding:0px 5px;
