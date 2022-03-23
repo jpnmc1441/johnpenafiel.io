@@ -1,5 +1,6 @@
 body {
-	font-family: 'Inspiration', cursive
+	font-family: 'Inspiration', cursive;
+	font-family: 'Lobster', cursive;
 	margin:auto;
 	color:rgba(250,216,89,0.7);
 	background-color:rgba(0,0,0,0.7);
@@ -30,7 +31,8 @@ color:rgba(250,216,89,1);
   text-align: center;
   margin: 3px auto;
   padding:0px 5px;
-  font-family: 'Inspiration', cursive
+  font-family: 'Inspiration', cursive;
+font-family: 'Lobster', cursive;
   font-weight: bolder;
   font-size: 90px;
   border:1px solid rgba(250,216,89,0.2);
