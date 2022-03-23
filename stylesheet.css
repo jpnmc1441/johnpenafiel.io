@@ -1,7 +1,7 @@
 body {
 	margin:auto;
 	color:rgba(250,216,89,0.7);
-	background-color:black;
+	background-color:rgba(0,0,0,0.7);
 	text-align: center;
   	width:auto;
   }
@@ -10,12 +10,6 @@ body {
 * {
   box-sizing: border-box;
   }
-
-.siteimg{
-  margin:auto;}
-
-.ironman{
-  margin:center;}
 
 .item {
   width: auto;
