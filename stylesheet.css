@@ -35,11 +35,11 @@ body {
   .sitetitle{
 color:rgba(250,216,89,1);
   text-align: center;
-  margin: 1px auto;
+  margin: 3px auto;
   padding:0px 5px;
   font-family: 'Inspiration', cursive;
   font-weight: bolder;
-  font-size: 50px;
+  font-size: 90px;
   border:1px solid rgba(250,216,89,0.2);
   width:fit-content;}
   
