@@ -11,7 +11,7 @@ body {
 * {
   box-sizing: border-box;
   }
-.ironman{width:95%;}
+.ironman{width:95%;max-width:300px;height:auto;}
 .item {
   width: auto;
   height: auto;
