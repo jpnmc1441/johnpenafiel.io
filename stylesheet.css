@@ -8,7 +8,7 @@
 
 body{
    font-family: "Exo 2", sans-serif;
-  background-image: url('https://s9.gifyu.com/images/99057D98-5121-4A83-BE61-D0331ED99427.gif');
+  background: black url('https://s9.gifyu.com/images/99057D98-5121-4A83-BE61-D0331ED99427.gif');
 /*  background: linear-gradient(
     142deg,
     rgba(63, 161, 251, 1) 0%,
