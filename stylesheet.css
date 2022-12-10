@@ -37,10 +37,10 @@ body{
   align-items: center;
   justify-content: center;
   transform: skew(0, -10deg);
-border:1px solid lime;
+/*border:1px solid lime;*/
 }
 .sweet, .stuff{
-  border:1px solid red;
+ /* border:1px solid red;*/
    width:100%;
   display:block;
 }
