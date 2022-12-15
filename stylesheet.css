@@ -1,4 +1,3 @@
-
 @import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@300;700;900&display=swap");
 *{
     margin: 0;
@@ -25,7 +24,7 @@ body{
 
 .header {
   max-width: 1200px;
-  margin: 5rem auto;
+  margin: auto;
   padding: 1rem;
   align-items: center;
   justify-content: center;
@@ -45,7 +44,7 @@ body{
   display:block;
 }
 
-
+.sweet{margin-top:60px;}
 
 .sweet-title {
  color: #fde9ff;
@@ -223,7 +222,3 @@ video {
   background-size: 10px 10px;
   z-index: 2;
 }
-
-
-
-
