@@ -259,6 +259,7 @@ button {
     height: auto;
     background-size: 100%;
     background-attachment: fixed;
+position:sticky;
 }
 .bg-light {
     background-color: transparent !important;
