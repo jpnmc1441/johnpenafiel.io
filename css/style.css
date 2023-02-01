@@ -36,7 +36,8 @@ src: url("../fonts/BalooChettan-Regular.ttf");
 }
 @media only screen and (max-width: 600px) {
   body {
-    background-color: lightblue;
+    background-color: navy;
+Color:red;
     overflow:scroll;
   }
   /* width */
