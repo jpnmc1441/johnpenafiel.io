@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Odds Watch</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Archivo:wght@500;700;900&display=swap');
@@ -44,6 +45,17 @@
     z-index:-1;
   }
   .wrap{width:100%;max-width:480px;position:relative;z-index:1;}
+
+  @media (max-width: 400px){
+    body{ padding:20px 12px 40px; }
+    h1{ font-size:24px; }
+    .board{ padding:18px 14px; }
+    .price{ font-size:48px; }
+    .side-btn{ font-size:11px; padding:10px 4px; }
+    .controls{ flex-direction:column; }
+    .target-row{ flex-wrap:wrap; }
+    .target-row input{ width:100%; }
+  }
 
   .eyebrow{
     font-family:'Space Mono',monospace;
