@@ -1,363 +1,425 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- basic -->
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- mobile metas -->
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="viewport" content="initial-scale=1, maximum-scale=1">
-<!-- site metas -->
-<title>John P</title>
-<meta name="keywords" content="">
-<meta name="description" content="">
-<meta name="author" content=""> 
-<!-- bootstrap css -->
-<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-<!-- style css -->
-<link rel="stylesheet" type="text/css" href="css/style.css">
-<!-- Responsive-->
-<link rel="stylesheet" href="css/responsive.css">
-<!-- fevicon -->
-<link rel="icon" href="images/fevicon.png" type="image/gif" />
-<!-- Scrollbar Custom CSS -->
-<link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
-<!-- Tweaks for older IEs-->
-<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-<!-- owl stylesheets --> 
-<link rel="stylesheet" href="css/owl.carousel.min.css">
-<link rel="stylesheet" href="css/owl.theme.default.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+<meta charset="UTF-8">
+<title>Odds Watch</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Archivo:wght@500;700;900&display=swap');
+
+  :root{
+    --ink:#eef0e9;
+    --paper:#eef0e9;
+    --line:#31382f;
+    --board:#111815;
+    --amber:#ffb020;
+    --green:#3ddc84;
+    --red:#ff5d5d;
+    --dim:#8a9188;
+  }
+  *{box-sizing:border-box;}
+  html, body{ height:100%; }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:'Archivo',sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:28px 16px 60px;
+    position:relative;
+    background:#000;
+  }
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:url('images/header.gif') center center / cover no-repeat;
+    z-index:-2;
+  }
+  body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.86); /* darkens the gif to black so text stays readable */
+    z-index:-1;
+  }
+  .wrap{width:100%;max-width:480px;position:relative;z-index:1;}
+
+  .eyebrow{
+    font-family:'Space Mono',monospace;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--dim);
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:6px;
+  }
+  h1{
+    font-size:28px;
+    font-weight:900;
+    margin:0 0 18px;
+    letter-spacing:-0.01em;
+  }
+  .match{
+    font-family:'Space Mono',monospace;
+    font-size:13px;
+    color:var(--dim);
+    margin-bottom:20px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:14px;
+  }
+  .match b{color:var(--ink);}
+
+  /* the board */
+  .board{
+    background:var(--board);
+    border-radius:6px;
+    padding:22px 20px;
+    color:var(--paper);
+    position:relative;
+    overflow:hidden;
+  }
+  .board::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:repeating-linear-gradient(0deg, rgba(255,255,255,.02) 0px, rgba(255,255,255,.02) 1px, transparent 1px, transparent 3px);
+    pointer-events:none;
+  }
+  .selector-row{
+    display:flex;
+    gap:8px;
+    margin-bottom:18px;
+  }
+  .side-btn{
+    flex:1;
+    background:transparent;
+    border:1px solid #2c3630;
+    color:var(--dim);
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    letter-spacing:.06em;
+    padding:9px 6px;
+    border-radius:4px;
+    cursor:pointer;
+    transition:.15s;
+  }
+  .side-btn.active{
+    border-color:var(--amber);
+    color:var(--amber);
+    background:rgba(255,176,32,.08);
+  }
+
+  .price-display{
+    text-align:center;
+    padding:20px 0 8px;
+  }
+  .price-label{
+    font-family:'Space Mono',monospace;
+    font-size:11px;
+    color:var(--dim);
+    letter-spacing:.12em;
+    text-transform:uppercase;
+  }
+  .price{
+    font-family:'Space Mono',monospace;
+    font-size:64px;
+    font-weight:700;
+    line-height:1;
+    margin:6px 0 2px;
+    transition:color .25s;
+    font-variant-numeric:tabular-nums;
+  }
+  .price.up{color:var(--green);}
+  .price.down{color:var(--red);}
+  .delta{
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    color:var(--dim);
+    min-height:16px;
+  }
+
+  .target-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:20px;
+    padding-top:18px;
+    border-top:1px dashed #2c3630;
+  }
+  .target-row label{
+    font-family:'Space Mono',monospace;
+    font-size:11px;
+    color:var(--dim);
+    letter-spacing:.06em;
+    white-space:nowrap;
+  }
+  .target-row input{
+    flex:1;
+    background:#1a221d;
+    border:1px solid #2c3630;
+    color:var(--amber);
+    font-family:'Space Mono',monospace;
+    font-size:16px;
+    padding:8px 10px;
+    border-radius:4px;
+    text-align:center;
+  }
+  .target-row input:focus{outline:1px solid var(--amber);}
+
+  .status-strip{
+    margin-top:14px;
+    font-family:'Space Mono',monospace;
+    font-size:11px;
+    color:var(--dim);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .pulse{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--dim);
+    display:inline-block;
+    margin-right:6px;
+  }
+  .pulse.live{background:var(--green);box-shadow:0 0 0 0 rgba(61,220,132,.6);animation:pulse 1.6s infinite;}
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(61,220,132,.5);}
+    70%{box-shadow:0 0 0 8px rgba(61,220,132,0);}
+    100%{box-shadow:0 0 0 0 rgba(61,220,132,0);}
+  }
+
+  .controls{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+  }
+  button.main{
+    flex:1;
+    font-family:'Archivo',sans-serif;
+    font-weight:700;
+    font-size:14px;
+    padding:13px;
+    border-radius:5px;
+    border:none;
+    cursor:pointer;
+    transition:.15s;
+  }
+  .btn-start{background:var(--amber);color:#1a1400;}
+  .btn-start:hover{filter:brightness(1.08);}
+  .btn-stop{background:transparent;border:1px solid var(--line);color:var(--ink);}
+  .btn-stop:hover{background:rgba(255,255,255,.06);}
+
+  .alert-log{
+    margin-top:22px;
+  }
+  .alert-log h2{
+    font-family:'Space Mono',monospace;
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--dim);
+    margin:0 0 10px;
+  }
+  .log-item{
+    font-family:'Space Mono',monospace;
+    font-size:12.5px;
+    padding:10px 12px;
+    background:#151d18;
+    border:1px solid var(--line);
+    border-left:3px solid var(--amber);
+    border-radius:3px;
+    margin-bottom:6px;
+    color:var(--ink);
+  }
+  .log-empty{
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    color:var(--dim);
+    padding:10px 0;
+  }
+
+  .note{
+    margin-top:26px;
+    font-size:12px;
+    line-height:1.55;
+    color:var(--dim);
+    border-top:1px solid var(--line);
+    padding-top:16px;
+  }
+  .note b{color:var(--ink);}
+</style>
 </head>
 <body>
-    <!-- header section start -->
-    <div class="header_section">
-      <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <div class="logo"><a href="index.html"><img src="images/logobg.png"></a></div>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item">
-                <a class="nav-link" href="index.html">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="about.html">About</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="Products.html">Products</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="blog.html">Blog</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="contact.html">Contact us</a>
-              </li>
-            </ul>
-            <!--
-			<form class="form-inline my-2 my-lg-0">              
-              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">GET STARTED</button>
-            </form>
-            <div class="search_icon">
-              <ul>
-                <li><a href="#"><img src="images/user-icon.png"></a></li>
-                <li><a href="#"><img src="images/bag-icon.png"></a></li>
-                <li><a href="#"><img src="images/search-icon.png"></a></li>
-              </ul>
-            </div>
-			-->
-          </div>
-        </nav>
-      </div>
-    <!-- header section end -->
-    <!-- banner section start -->
-    <div class="banner_section layout_padding">
-      <div class="container">
-        <div id="main_slider" class="carousel slide" data-ride="carousel">
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <div class="row">
-                <div class="col-md-6">
-                  <h1 class="your_text">Your Favorite</h1>
-                  <h1 class="Shows_text">Shows And Movies</h1>
-                  <p class="there_text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or</p>
-                  <div class="start_bt"><a href="#">Start Now</a></div>
-                  <div class="read_bt"><a href="#">Read More</a></div>
-                </div>
-                <div class="col-md-6">
-                  <div class="images_1"><img src="images/banner-bg.png"></div>
-                </div>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <div class="row">
-                <div class="col-md-6">
-                  <h1 class="your_text">Your Favorite</h1>
-                  <h1 class="Shows_text">Shows And Movies</h1>
-                  <p class="there_text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or</p>
-                  <div class="start_bt"><a href="#">Start Now</a></div>
-                  <div class="read_bt"><a href="#">Read More</a></div>
-                </div>
-                <div class="col-md-6">
-                  <div class="images_1"><img src="images/img-1.png"></div>
-                </div>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <div class="row">
-                <div class="col-md-6">
-                  <h1 class="your_text">Your Favorite</h1>
-                  <h1 class="Shows_text">Shows And Movies</h1>
-                  <p class="there_text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or</p>
-                  <div class="start_bt"><a href="#">Start Now</a></div>
-                  <div class="read_bt"><a href="#">Read More</a></div>
-                </div>
-                <div class="col-md-6">
-                  <div class="images_1"><img src="images/img-1.png"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
-            <i class="fa-arrow-left"><img src="images/left-arrow.png"></i>
-          </a>
-          <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
-            <i class="fa-angle-right"><img src="images/right-arrow.png"></i>
-          </a>
-        </div>
-          <div class="banner_section_2">
-            <div class="row">
-              <div class="col-lg-4 col-sm-12">
-                <div class="box_main">
-                  <div class="internet_icon"></div>
-                  <h4 class="broadband_text">Broadband</h4>
-                  <p class="many_text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, m Ipsum, you need to be</p>
-                </div>
-              </div>
-              <div class="col-lg-4 col-sm-12">
-                <div class="box_main active">
-                  <div class="internet_icon1"></div>
-                  <h4 class="broadband_text active">Broadband</h4>
-                  <p class="many_text active">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, m Ipsum, you need to be</p>
-                </div>
+<div class="wrap">
+  <div class="eyebrow"><span>ODDS WATCH · DEMO</span><span id="clock">--:--:--</span></div>
+  <h1>Threshold Alert</h1>
+  <div class="match">World Cup Quarterfinal · <b>Norway vs England</b> · Moneyline</div>
 
+  <div class="board">
+    <div class="selector-row">
+      <button class="side-btn active" data-side="NOR" data-base="290">NORWAY ML</button>
+      <button class="side-btn" data-side="ENG" data-base="-108">ENGLAND ML</button>
+      <button class="side-btn" data-side="DRAW" data-base="255">DRAW</button>
+    </div>
 
-		      
-              </div>
-              <div class="col-lg-4 col-sm-12">
-                <div class="box_main">
-                  <div class="internet_icon2"></div>
-                  <h4 class="broadband_text">Broadband</h4>
-                  <p class="many_text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, m Ipsum, you need to be</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        
-      </div>
+    <div class="price-display">
+      <div class="price-label">Live Price (simulated)</div>
+      <div class="price" id="price">+290</div>
+      <div class="delta" id="delta">&nbsp;</div>
     </div>
-    <!-- banner section end -->
+
+    <div class="target-row">
+      <label>ALERT AT</label>
+      <input id="target" type="text" value="+400">
     </div>
-    <!-- about section start -->
-    <div class="about_section layout_padding">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="image_2"><img src="images/img-2.png"></div>
-          </div>
-          <div class="col-md-6">
-            <h1 class="live_text">Live Sport and TV-shows for best
-            friends
-            </h1>
-            <p class="lorem_text">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters,</p>
-            <div class="online_bt_main">
-              <div class="online_bt"><a href="#">4K Ultra HD Quality</a></div>
-              <div class="online_bt1"><a href="#">200+ Online Channels</a></div>
-              <div class="read_bt1"><a href="#">Read More</a></div>
-            </div>
-          </div>
-        </div>
-      </div>
+
+    <div class="status-strip">
+      <span><span class="pulse" id="pulseDot"></span><span id="statusText">Stopped</span></span>
+      <span id="tickCount">0 ticks</span>
     </div>
-    <!-- about section end -->
-    <!-- product section start -->
-    <div class="product_section layout_padding">
-      <div class="container">
-        <h2 class="tariffs_text">Tariffs</h2>
-        <h1 class="choose_text">Choose your plan</h1>
-        <p class="lorem_text1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin bibendum, est ac faucibus hendrerit, mauris ante viverra urna, in elementum urna est ut ligula.</p>
-        <div class="product_section2">
-          <div class="row">
-            <div class="col-lg-4 col-sm-12">
-              <h2 class="easy_text">Easy Surfing</h2>
-              <h1 class="internet_text">Internet</h1>
-              <div class="month_main clearfix">
-                <h1 class="dolor_text">$24.99</h1>
-                <h2 class="month_text">Month</h2>
-                <p class="long_text">It is a long established f
-                act distracteontent </p>
-              </div>
-              <div class="seemore_main">
-                <div class="see_more"><a href="#">SEE MORE</a></div>
-              </div>
-            </div>
-            <div class="col-lg-4 col-sm-12">
-              <h2 class="easy_text">Impression</h2>
-              <h1 class="internet_text">Tv</h1>
-              <div class="month_main clearfix">
-                <h1 class="dolor_text">$24.99</h1>
-                <h2 class="month_text">Month</h2>
-                <p class="long_text">It is a long established f
-                act distracteontent </p>
-              </div>
-              <div class="seemore_main">
-                <div class="see_more"><a href="#">SEE MORE</a></div>
-              </div>
-            </div>
-            <div class="col-lg-4 col-sm-12">
-              <h2 class="easy_text">Premium Plan</h2>
-              <h1 class="internet_text">Internet + TV + Phone</h1>
-              <div class="month_main clearfix">
-                <h1 class="dolor_text">$24.99</h1>
-                <h2 class="month_text">Month</h2>
-                <p class="long_text">It is a long established f
-                act distracteontent </p>
-              </div>
-              <div class="seemore_main">
-                <div class="see_more"><a href="#">SEE MORE</a></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- product section end -->
-    <!-- contact section start -->
-    <div class="contact_section layout_padding">
-      <div class="container">
-        <h1 class="check_text">Check ability to connect our services in your area</h1>
-        <div class="contact_section2">
-          <div class="addres_main">
-            <div class="input_bg">
-              <h3 class="fact_text">It is a long established fact that a reader will be distracted</h3>
-              <input type="text" class="address_text" placeholder="Enter your address" name="text">
-              <button type="button" class="get_bt">GET STARTED</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- contact section end -->
-    <!-- client section start -->
-    <div class="client_section layout_padding">
-      <div class="container">
-        <h1 class="client_taital">What our clients say</h1>
-        <div class="client_section2 layout_padding">
-          <div class="row">
-            <div class="col-sm-4">
-              <div class="client_image"><img src="images/img-3.png"></div>
-            </div>
-            <div class="col-sm-8">
-              <div class="miller_text">Miller<span class="quote_icon"><img src="images/quote-icon.png"></span></div>
-              <p class="ipsum_text">ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id e</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- client section end -->
-    <!-- subscribe section start -->
-    <div class="subscribe_section layout_padding">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-4">
-            <h1 class="subscribe_text">Subscribe Now</h1>
-          </div>
-          <div class="col-sm-8">
-            <div class="mail_main">
-              <input type="text" class="address_text1" placeholder="Enter your address" name="text">
-              <button type="button" class="get_bt1">GET STARTED</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--  clsubscribe section end -->
-    <!-- footer section start -->
-    <div class="footer_section layout_padding">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-3 col-sm-6">
-            <div class="fooer_logo"><img src="images/footer-logo.png"></div>
-            <h1 class="customer_text">CUSTOMER SERVICE</h1>
-            <p class="footer_lorem_text">There are many variat
-ions of passages of L
-orem Ipsum available
-, but the majority h
-ave suffered altera
-tion in some form, by </p>
-          </div>
-          <div class="col-lg-3 col-sm-6">
-            <h1 class="customer_text">LET US HELP YOU</h1>
-            <p class="footer_lorem_text">There are many variat
-ions of passages of L
-orem Ipsum available
-, but the majority h
-ave suffered altera
-tion in some form, by </p>
-          </div>
-          <div class="col-lg-3 col-sm-6">
-            <h1 class="customer_text">INFORMATION</h1>
-            <p class="footer_lorem_text1">About Us<br>
-Careers<br>
-Sell on shopee<br>
-Press & News<br>
-Competitions<br>
-Terms & Conditions</p>
-          </div>
-          <div class="col-lg-3 col-sm-6">
-            <h1 class="customer_text">OUR SHOP</h1>
-            <p class="footer_lorem_text">There are many variat
-ions of passages of L
-orem Ipsum available
-, but the majority h
-ave suffered altera
-tion in some form, by </p>
-          <div class="social_icon">
-            <ul>
-              <li><a href="#"><img src="images/fb-icon.png"></a></li>
-              <li><a href="#"><img src="images/twitter-icon.png"></a></li>
-              <li><a href="#"><img src="images/instagram-icon.png"></a></li>
-              <li><a href="#"><img src="images/linkedin-icon.png"></a></li>
-            </ul>
-          </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--  footer section end -->
-    <!-- copyright section start -->
-    <div class="copyright_section">
-      <div class="container">
-        <div class="border"></div>
-        <p class="copyright_text">2020 All Rights Reserved. Design by <a href="https://html.design">Free html  Templates</a></p>
-      </div>
-    </div>
-    <!-- copyright section end -->
-    <!-- Javascript files-->
-    <script src="js/jquery.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/jquery-3.0.0.min.js"></script>
-    <script src="js/plugin.js"></script>
-    <!-- sidebar -->
-    <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
-    <script src="js/custom.js"></script>
-    <!-- javascript --> 
-    <script src="js/owl.carousel.js"></script>
-    <script src="https:cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>    
+  </div>
+
+  <div class="controls">
+    <button class="main btn-start" id="startBtn">Start watching</button>
+    <button class="main btn-stop" id="stopBtn">Stop</button>
+  </div>
+
+  <div class="alert-log">
+    <h2>Alert Log</h2>
+    <div id="log"><div class="log-empty">No alerts yet — waiting for a hit.</div></div>
+  </div>
+
+  <div class="note">
+    <b>What this actually is:</b> the odds here are a simulated random walk seeded from real lines pulled today, not a live FanDuel feed — FanDuel has no public API for retail bet automation, so this demo shows the alert logic only. To make it real: swap the <code>tick()</code> function's random walk for a fetch to an odds API (e.g. The Odds API) polling every 30–60s, and point the alert at a push service (Pushover, ntfy.sh, or a Twilio SMS call) instead of the browser notification below. Placing the bet itself still has to be a manual tap on FanDuel — automated wager submission against their site violates their Terms of Service.
+  </div>
+</div>
+
+<script>
+let base = 290;
+let current = 290;
+let side = 'NOR';
+let running = false;
+let timer = null;
+let ticks = 0;
+let alerted = false;
+
+const priceEl = document.getElementById('price');
+const deltaEl = document.getElementById('delta');
+const targetEl = document.getElementById('target');
+const statusText = document.getElementById('statusText');
+const pulseDot = document.getElementById('pulseDot');
+const tickCount = document.getElementById('tickCount');
+const logEl = document.getElementById('log');
+const clockEl = document.getElementById('clock');
+
+function fmtOdds(n){
+  n = Math.round(n);
+  return n >= 0 ? '+'+n : ''+n;
+}
+
+function parseOdds(str){
+  str = str.trim().replace(/^\+/, '');
+  const n = parseFloat(str);
+  return isNaN(n) ? null : n;
+}
+
+function updateClock(){
+  clockEl.textContent = new Date().toLocaleTimeString('en-US', {hour12:false});
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+document.querySelectorAll('.side-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.side-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    side = btn.dataset.side;
+    base = parseFloat(btn.dataset.base);
+    current = base;
+    alerted = false;
+    priceEl.textContent = fmtOdds(current);
+    priceEl.className = 'price';
+    deltaEl.textContent = '\u00A0';
+    logEl.innerHTML = '<div class="log-empty">No alerts yet — waiting for a hit.</div>';
+  });
+});
+
+function tick(){
+  ticks++;
+  tickCount.textContent = ticks + ' ticks';
+  const prev = current;
+  // random walk, slightly biased toward drifting back to base (mean reversion)
+  const drift = (base - current) * 0.03;
+  const noise = (Math.random() - 0.48) * (Math.abs(current) < 150 ? 4 : 14);
+  current = current + drift + noise;
+
+  priceEl.textContent = fmtOdds(current);
+  const change = current - prev;
+  if (change > 0.3){
+    priceEl.className = 'price up';
+    deltaEl.textContent = '\u25B2 ' + fmtOdds(Math.round(change*10)/10).replace('+','+');
+  } else if (change < -0.3){
+    priceEl.className = 'price down';
+    deltaEl.textContent = '\u25BC ' + fmtOdds(Math.round(change*10)/10);
+  } else {
+    deltaEl.textContent = '\u2014 flat';
+  }
+
+  checkTarget();
+}
+
+function checkTarget(){
+  const target = parseOdds(targetEl.value);
+  if (target === null || alerted) return;
+
+  const hit = target >= 0 ? current >= target : current <= target;
+  if (hit){
+    alerted = true;
+    fireAlert(target);
+  }
+}
+
+function fireAlert(target){
+  const time = new Date().toLocaleTimeString('en-US', {hour12:false});
+  const item = document.createElement('div');
+  item.className = 'log-item';
+  item.textContent = `${time} — ${side} hit ${fmtOdds(current)} (target ${fmtOdds(target)})`;
+  if (logEl.querySelector('.log-empty')) logEl.innerHTML = '';
+  logEl.prepend(item);
+
+  if ('Notification' in window){
+    if (Notification.permission === 'granted'){
+      new Notification('Odds target hit', { body: `${side} reached ${fmtOdds(current)} — target was ${fmtOdds(target)}` });
+    } else if (Notification.permission !== 'denied'){
+      Notification.requestPermission().then(p=>{
+        if (p === 'granted'){
+          new Notification('Odds target hit', { body: `${side} reached ${fmtOdds(current)} — target was ${fmtOdds(target)}` });
+        }
+      });
+    }
+  }
+}
+
+document.getElementById('startBtn').addEventListener('click', ()=>{
+  if (running) return;
+  running = true;
+  alerted = false;
+  statusText.textContent = 'Watching…';
+  pulseDot.classList.add('live');
+  if ('Notification' in window && Notification.permission === 'default'){
+    Notification.requestPermission();
+  }
+  timer = setInterval(tick, 1200);
+});
+
+document.getElementById('stopBtn').addEventListener('click', ()=>{
+  running = false;
+  clearInterval(timer);
+  statusText.textContent = 'Stopped';
+  pulseDot.classList.remove('live');
+});
+</script>
 </body>
 </html>
